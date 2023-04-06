@@ -48,8 +48,8 @@ namespace InventoryTest.Logic.Abstract
                 ? item.Amount
                 : item.MaxItemInSlot - slot.Amount;
             int amountLeft = item.Amount - amountToAdd;
+            
             IInventoryItem clonedItem = item.Clone();
-
             clonedItem.Amount = amountToAdd;
 
             if (slot.IsEmpty)
@@ -59,7 +59,7 @@ namespace InventoryTest.Logic.Abstract
 
             OnInventoryAddedIvent?.Invoke(sender, item, amountToAdd);
 
-            if (amountLeft <= 0) return false;
+            if (amountLeft <= 0) return true;
 
             item.Amount = amountLeft;
 
@@ -68,7 +68,35 @@ namespace InventoryTest.Logic.Abstract
 
         public void Remove(object sender, Type itemType, int amount = 1)
         {
-            throw new NotImplementedException();
+            IInventorySlot[] slotsWithItem =  GetAllSlots(itemType);
+
+            if (slotsWithItem.Length == 0) return;
+
+            int amountToRemove = amount;
+            int count = slotsWithItem.Length;
+
+            for (int i = count - 1; i >= 0; i--)
+            {
+                IInventorySlot slot = slotsWithItem[i];
+
+                if (slot.Amount >= amountToRemove) 
+                {
+                    slot.Item.Amount -= amountToRemove;
+                    
+                    if (slot.Amount <= 0)
+                        slot.Clear();
+
+                    break;
+                }
+
+                amountToRemove -= slot.Amount;
+                slot.Clear();
+            }
+        }
+
+        public IInventorySlot[] GetAllSlots(Type itemType)
+        {
+            return _slots.FindAll(slot => !slot.IsEmpty && slot.ItemType == itemType).ToArray();
         }
 
         public bool HasItem(Type type, out IInventoryItem item)
