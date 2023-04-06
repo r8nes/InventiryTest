@@ -12,7 +12,7 @@ namespace InventoryTest.Logic.Abstract
             _inventory = new InventoryWithSlots(cap);
             Debug.Log($"Init, capacity: {cap}");
         }
-
+         
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.A))
@@ -29,9 +29,10 @@ namespace InventoryTest.Logic.Abstract
         private void AddRandomItem()
         {
             var rand = Random.Range(1,5);
-            var bullet = new Bullet(5);
-            
-            bullet.Amount = rand;
+            var bullet = new Bullet(5)
+            {
+                Amount = rand
+            };
             _inventory.TryToAdd(this, bullet);
         }
 
