@@ -5,9 +5,9 @@ namespace InventoryTest.Logic.Abstract
 {
     public class Item : MonoBehaviour, IInventoryItem
     {
-        public int Amount { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int MaxItemInSlot { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsEquipped { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Amount { get ; set; }
+        public int MaxItemInSlot { get; set; }
+        public bool IsEquipped { get; set; }
 
         public Type Type => throw new NotImplementedException();
 
