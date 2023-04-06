@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIInventoryItem : UIItem 
 {
     [SerializeField] private Image _imageIcon;
-    [SerializeField] private TextMeshPro _textAmount;
+    [SerializeField] private TextMeshProUGUI _textAmount;
 
     public IInventoryItem Item { get; private set; }
 
@@ -20,6 +20,7 @@ public class UIInventoryItem : UIItem
 
         Item = slot.Item;
         _imageIcon.sprite = Item.Info.SpriteIcon;
+        _imageIcon.gameObject.SetActive(true);
 
         bool textAmountEnabled = slot.Amount > 1;
         _textAmount.gameObject.SetActive(textAmountEnabled);

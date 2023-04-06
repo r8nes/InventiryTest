@@ -6,7 +6,7 @@ namespace InventoryTest.Logic.Abstract
     {
         public int Amount => IsEmpty ? 0 : Item.State.Amount;
         public int Capacity { get; private set; }
-        public bool IsFull => Amount == Capacity;
+        public bool IsFull => !IsEmpty && Amount == Capacity;
         public bool IsEmpty => Item == null;
         public Type ItemType => Item.Type;
         public IInventoryItem Item { get; private set; } 

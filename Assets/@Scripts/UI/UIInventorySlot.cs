@@ -1,18 +1,39 @@
-﻿using UnityEngine.EventSystems;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UIInventorySlot : UISlot 
+namespace InventoryTest.Logic.Abstract
 {
-    public UIInventorySlot Slot { get; private set; }
-
-    public void SetSlot(UIInventorySlot newSlot) => Slot = newSlot;
-
-    public override void OnDrop(PointerEventData eventData)
+    public class UIInventorySlot : UISlot
     {
-        UIInventoryItem otherItemUI = eventData.pointerDrag.GetComponent<UIInventoryItem>();
-        UIInventorySlot otherSlotUI = otherItemUI.GetComponentInParent<UIInventorySlot>();
-        UIInventorySlot otherSlot = otherSlotUI.Slot;
+        [SerializeField] private UIInventoryItem _uIInventoryItem;
+        public IInventorySlot Slot { get; private set; }
 
+        private UIInventory _uInventory;
 
+        private void Awake() => _uInventory = GetComponentInParent<UIInventory>();
 
+        public void SetSlot(IInventorySlot newSlot) => Slot = newSlot;
+
+        public override void OnDrop(PointerEventData eventData)
+        {
+            UIInventoryItem otherItemUI = eventData.pointerDrag.GetComponent<UIInventoryItem>();
+            UIInventorySlot otherSlotUI = otherItemUI.GetComponentInParent<UIInventorySlot>();
+            IInventorySlot otherSlot = otherSlotUI.Slot;
+
+            InventoryWithSlots inventory = _uInventory.Inventory;
+
+            inventory.TransferItemsToSlot(this, otherSlot, Slot);
+
+            Refresh();
+            otherSlotUI.Refresh();
+        }
+
+        public void Refresh() 
+        {
+            if (Slot != null)
+            {
+                _uIInventoryItem.Refresh(Slot);
+            }
+        }
     }
 }
