@@ -9,5 +9,7 @@ namespace InventoryTest.Logic.Abstract
         string Description { get; }
         int MaxItemInSlot { get; }
         Sprite SpriteIcon { get; }
+
+        // TODO: Add Weight later
     }
 }

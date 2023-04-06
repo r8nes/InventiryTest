@@ -39,7 +39,7 @@ namespace InventoryTest.Logic.Abstract
         private void RemoveRandomItem()
         {
             var rand = Random.Range(1,5);
-            _inventory.Remove(this, typeof(Bullet), rand);
+            _inventory.Remove(this, typeof(Item), rand);
         }
     }
 }
