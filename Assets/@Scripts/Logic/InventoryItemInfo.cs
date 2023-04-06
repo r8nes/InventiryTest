@@ -2,7 +2,7 @@
 
 namespace InventoryTest.Logic.Abstract
 {
-    [CreateAssetMenu(fileName = "InventoryItemInfo", menuName = "SO/Item")]
+    [CreateAssetMenu(fileName = "InventoryItemInfo", menuName = "SO/ItemInfo")]
     public class InventoryItemInfo : ScriptableObject, IInventoryItemInfo
     {
         [SerializeField] private string _id;

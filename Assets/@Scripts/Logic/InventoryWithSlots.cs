@@ -14,6 +14,7 @@ namespace InventoryTest.Logic.Abstract
 
         public event Action<object, IInventoryItem, int> OnInventoryAddedEvent;
         public event Action<object, Type, int> OnInventoryRemovedEvent;
+        public event Action<object> OnInventoryStateChangedEvent;
 
         public InventoryWithSlots(int capacity)
         {
@@ -23,6 +24,35 @@ namespace InventoryTest.Logic.Abstract
 
             for (int i = 0; i < capacity; i++)
                 _slots.Add(new InventorySlot());
+        }
+
+        public void TransferItemsToSlot(object sender, IInventorySlot from, IInventorySlot to) 
+        {
+            if (from.IsEmpty) return;
+            
+            if (to.IsFull) return;
+
+            if (!to.IsEmpty && from.ItemType != to.ItemType) return;
+
+            int slotCapacity = from.Capacity;
+            bool isFits = from.Amount + to.Amount <= slotCapacity;
+            int amountToAdd = isFits ? from.Amount : slotCapacity - to.Amount;
+            int amountLeft = from.Amount - amountToAdd;
+
+            if (to.IsEmpty)
+            {
+                to.SetItem(from.Item);
+                from.Clear();
+                OnInventoryStateChangedEvent?.Invoke(sender);
+            }
+
+            to.Item.State.Amount += amountToAdd;
+            if (isFits)
+                from.Clear();
+            else
+                from.Item.State.Amount = amountLeft;
+
+            OnInventoryStateChangedEvent?.Invoke(sender);
         }
 
         public bool TryToAdd(object sender, IInventoryItem item)
@@ -59,8 +89,10 @@ namespace InventoryTest.Logic.Abstract
             else
                 slot.Item.State.Amount += amountToAdd;
 
-            Debug.Log($"Добавлено {item.Type}, {item.State.Amount}") ;
+            Debug.Log($"Добавлено {item.Type}, {item.State.Amount}");
+             
             OnInventoryAddedEvent?.Invoke(sender, item, amountToAdd);
+            OnInventoryStateChangedEvent?.Invoke(sender);
 
             if (amountLeft <= 0) return true;
 
@@ -89,7 +121,9 @@ namespace InventoryTest.Logic.Abstract
                         slot.Clear();
 
                     Debug.Log($"Убрано {item}, {amountToRemove}");
+                 
                     OnInventoryRemovedEvent?.Invoke(sender, item, amountToRemove);
+                    OnInventoryStateChangedEvent?.Invoke(sender);
 
                     break;
                 }
@@ -99,7 +133,9 @@ namespace InventoryTest.Logic.Abstract
          
                 slot.Clear();
                 Debug.Log($"Убрано {item}, {amountToRemoved}");
+
                 OnInventoryRemovedEvent?.Invoke(sender, item, amountToRemoved);
+                OnInventoryStateChangedEvent?.Invoke(sender);
             }
         }
 

@@ -7,7 +7,7 @@ namespace InventoryTest.Logic.Abstract
         public IInventoryItemInfo Info { get; }
         public IInventoryItemState State { get; }
         
-        // TODO: Changeto enum type
+        // TODO: Change to enum type
         public Type Type => GetType();
 
         public Item(IInventoryItemInfo info)
