@@ -45,26 +45,26 @@ namespace InventoryTest.Logic.Abstract
 
         private bool TryToAddToSlot(object sender, IInventorySlot slot, IInventoryItem item)
         {
-            bool isFits = slot.Amount + item.Amount <= item.MaxItemInSlot;
+            bool isFits = slot.Amount + item.State.Amount <= item.Info.MaxItemInSlot;
             int amountToAdd = isFits
-                ? item.Amount
-                : item.MaxItemInSlot - slot.Amount;
-            int amountLeft = item.Amount - amountToAdd;
+                ? item.State.Amount
+                : item.Info.MaxItemInSlot - slot.Amount;
+            int amountLeft = item.State.Amount - amountToAdd;
             
             IInventoryItem clonedItem = item.Clone();
-            clonedItem.Amount = amountToAdd;
+            clonedItem.State.Amount = amountToAdd;
 
             if (slot.IsEmpty)
                 slot.SetItem(clonedItem);
             else
-                slot.Item.Amount += amountToAdd;
+                slot.Item.State.Amount += amountToAdd;
 
-            Debug.Log($"Добавлено {item.Type}, {item.Amount}") ;
+            Debug.Log($"Добавлено {item.Type}, {item.State.Amount}") ;
             OnInventoryAddedEvent?.Invoke(sender, item, amountToAdd);
 
             if (amountLeft <= 0) return true;
 
-            item.Amount = amountLeft;
+            item.State.Amount = amountLeft;
 
             return TryToAdd(sender, item);
         }
@@ -83,7 +83,7 @@ namespace InventoryTest.Logic.Abstract
                 IInventorySlot slot = slotsWithItem[i];
                 if (slot.Amount >= amountToRemove) 
                 {
-                    slot.Item.Amount -= amountToRemove;
+                    slot.Item.State.Amount -= amountToRemove;
                     
                     if (slot.Amount <= 0)
                         slot.Clear();
@@ -166,7 +166,7 @@ namespace InventoryTest.Logic.Abstract
         public IInventoryItem[] GetEquippedItems()
         {
             List<IInventorySlot> requiredSlots = _slots.
-                FindAll(slot => !slot.IsEmpty && slot.Item.IsEquipped);
+                FindAll(slot => !slot.IsEmpty && slot.Item.State.IsEquipped);
             List<IInventoryItem> equippedItems = new List<IInventoryItem>();
 
             foreach (var slot in requiredSlots)

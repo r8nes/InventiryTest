@@ -13,7 +13,7 @@ public class UIItem : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHa
         _rectTransform = GetComponent<RectTransform>();
         _mainCanvas = GetComponentInParent<Canvas>();
     }
-
+    
     public void OnBeginDrag(PointerEventData eventData)
     {
         Transform slotTransform = _rectTransform.parent;

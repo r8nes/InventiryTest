@@ -4,7 +4,7 @@ namespace InventoryTest.Logic.Abstract
 {
     public class InventorySlot : IInventorySlot
     {
-        public int Amount => IsEmpty ? 0 : Item.Amount;
+        public int Amount => IsEmpty ? 0 : Item.State.Amount;
         public int Capacity { get; private set; }
         public bool IsFull => Amount == Capacity;
         public bool IsEmpty => Item == null;
@@ -16,14 +16,14 @@ namespace InventoryTest.Logic.Abstract
             if (!IsEmpty) return;
 
             Item = item;
-            Capacity = item.MaxItemInSlot;
+            Capacity = item.Info.MaxItemInSlot;
         }
 
         public void Clear() 
         {
             if (IsEmpty) return;
 
-            Item.Amount = 0;
+            Item.State.Amount = 0;
             Item = null;
         }
     }
