@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace InventoryTest.Logic.Abstract
 {
@@ -11,7 +12,8 @@ namespace InventoryTest.Logic.Abstract
 
         private List<IInventorySlot> _slots;
 
-        public event Action<object, IInventoryItem, int> OnInventoryAddedIvent;
+        public event Action<object, IInventoryItem, int> OnInventoryAddedEvent;
+        public event Action<object, Type, int> OnInventoryRemovedEvent;
 
         public InventoryWithSlots(int capacity)
         {
@@ -57,7 +59,8 @@ namespace InventoryTest.Logic.Abstract
             else
                 slot.Item.Amount += amountToAdd;
 
-            OnInventoryAddedIvent?.Invoke(sender, item, amountToAdd);
+            Debug.Log($"Добавлено {item.Type}, {item.Amount}") ;
+            OnInventoryAddedEvent?.Invoke(sender, item, amountToAdd);
 
             if (amountLeft <= 0) return true;
 
@@ -66,9 +69,9 @@ namespace InventoryTest.Logic.Abstract
             return TryToAdd(sender, item);
         }
 
-        public void Remove(object sender, Type itemType, int amount = 1)
+        public void Remove(object sender, Type item, int amount = 1)
         {
-            IInventorySlot[] slotsWithItem =  GetAllSlots(itemType);
+            IInventorySlot[] slotsWithItem =  GetAllSlots(item);
 
             if (slotsWithItem.Length == 0) return;
 
@@ -78,7 +81,6 @@ namespace InventoryTest.Logic.Abstract
             for (int i = count - 1; i >= 0; i--)
             {
                 IInventorySlot slot = slotsWithItem[i];
-
                 if (slot.Amount >= amountToRemove) 
                 {
                     slot.Item.Amount -= amountToRemove;
@@ -86,22 +88,25 @@ namespace InventoryTest.Logic.Abstract
                     if (slot.Amount <= 0)
                         slot.Clear();
 
+                    Debug.Log($"Убрано {item}, {amountToRemove}");
+                    OnInventoryRemovedEvent?.Invoke(sender, item, amountToRemove);
+
                     break;
                 }
 
+                var amountToRemoved = slot.Amount;
                 amountToRemove -= slot.Amount;
+         
                 slot.Clear();
+                Debug.Log($"Убрано {item}, {amountToRemoved}");
+                OnInventoryRemovedEvent?.Invoke(sender, item, amountToRemoved);
             }
-        }
-
-        public IInventorySlot[] GetAllSlots(Type itemType)
-        {
-            return _slots.FindAll(slot => !slot.IsEmpty && slot.ItemType == itemType).ToArray();
         }
 
         public bool HasItem(Type type, out IInventoryItem item)
         {
-            throw new NotImplementedException();
+            item = GetItem(type);
+            return item != null;
         }
 
         #region Getters
@@ -118,6 +123,19 @@ namespace InventoryTest.Logic.Abstract
 
             return amount;
         }
+
+        public IInventorySlot[] GetAllSlots()
+        {
+            return _slots.ToArray();
+        }
+
+        public IInventorySlot[] GetAllSlots(Type itemType)
+        {
+            return _slots.FindAll(slot => !slot.IsEmpty && slot.ItemType == itemType).ToArray();
+        }
+
+        public IInventoryItem GetItem(Type itemType) =>
+            _slots.Find(slot => slot.ItemType == itemType).Item;
 
         public IInventoryItem[] GetAllItems()
         {
@@ -156,9 +174,6 @@ namespace InventoryTest.Logic.Abstract
 
             return equippedItems.ToArray();
         }
-
-        public IInventoryItem GetItem(Type itemType) =>
-            _slots.Find(slot => slot.ItemType == itemType).Item;
 
         #endregion
     }
