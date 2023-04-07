@@ -30,7 +30,7 @@ namespace InventoryTest.Logic.Abstract
         {
             if (from.IsEmpty) return;
             
-            if (to.IsFull || to.PurchaseInfo.NeedToBuy) return;
+            if (to.IsFull || to.NeedToBuy) return;
 
             if (!to.IsEmpty && from.ItemType != to.ItemType) return;
 
@@ -67,7 +67,7 @@ namespace InventoryTest.Logic.Abstract
 
             IInventorySlot emptySlot = _slots.Find(slot => slot.IsEmpty);
 
-            if (emptySlot != null)
+            if (emptySlot != null && !emptySlot.NeedToBuy)
                 return TryToAddToSlot(sender, emptySlot, item);
 
             return false;
@@ -75,6 +75,9 @@ namespace InventoryTest.Logic.Abstract
 
         public bool TryToAddToSlot(object sender, IInventorySlot slot, IInventoryItem item)
         {
+            if (slot.NeedToBuy)
+                return false;
+            
             bool isFits = slot.Amount + item.State.Amount <= item.Info.MaxItemInSlot;
             int amountToAdd = isFits
                 ? item.State.Amount
@@ -89,8 +92,6 @@ namespace InventoryTest.Logic.Abstract
             else
                 slot.Item.State.Amount += amountToAdd;
 
-            Debug.Log($"Добавлено {item.Type}, {item.State.Amount}");
-             
             OnInventoryAddedEvent?.Invoke(sender, item, amountToAdd);
             OnInventoryStateChangedEvent?.Invoke(sender);
 
@@ -120,8 +121,6 @@ namespace InventoryTest.Logic.Abstract
                     if (slot.Amount <= 0)
                         slot.Clear();
 
-                    Debug.Log($"Убрано {item}, {amountToRemove}");
-                 
                     OnInventoryRemovedEvent?.Invoke(sender, item, amountToRemove);
                     OnInventoryStateChangedEvent?.Invoke(sender);
 
@@ -132,7 +131,6 @@ namespace InventoryTest.Logic.Abstract
                 amountToRemove -= slot.Amount;
          
                 slot.Clear();
-                Debug.Log($"Убрано {item}, {amountToRemoved}");
 
                 OnInventoryRemovedEvent?.Invoke(sender, item, amountToRemoved);
                 OnInventoryStateChangedEvent?.Invoke(sender);
@@ -147,7 +145,6 @@ namespace InventoryTest.Logic.Abstract
 
         #region Getters
 
-        // TODO: Check later
         public float GetAllWeight() 
         {
             float amount = 0;

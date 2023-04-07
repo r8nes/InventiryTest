@@ -9,7 +9,7 @@ namespace InventoryTest.Logic.Abstract
         [SerializeField] private int _price;
         [SerializeField] private bool _needToBuy;
 
-        public int Price => _price;
-        public bool NeedToBuy => _needToBuy;
+        public int Price { get => _price; set => _price = value; }
+        public bool NeedToBuy { get => _needToBuy; set => _needToBuy = value; }
     }
 }

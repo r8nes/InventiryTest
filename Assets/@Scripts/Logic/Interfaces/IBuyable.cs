@@ -2,7 +2,7 @@
 {
     public interface IBuyable
     {
-        int Price { get; }
-        bool NeedToBuy { get; }
+        int Price { get; set; }
+        bool NeedToBuy { get; set; }
     }
 }

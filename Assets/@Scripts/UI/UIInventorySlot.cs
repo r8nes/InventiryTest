@@ -7,16 +7,27 @@ namespace InventoryTest.Logic.Abstract
 {
     public class UIInventorySlot : UISlot
     {
-        [SerializeField] private UIInventoryItem _uIInventoryItem;
-
         [SerializeField] private Image _slotImage;
         [SerializeField] private TextMeshProUGUI _slotText;
-        public IInventorySlot Slot { get; private set; }
+        [SerializeField] private UIInventoryItem _uIInventoryItem;
+        [SerializeField] private SlotPurchaseData _slotPurchaseData;
+
         private UIInventory _uInventory;
+        public IInventorySlot Slot { get; private set; }
 
         private void Awake() => _uInventory = GetComponentInParent<UIInventory>();
 
-        public void SetSlot(IInventorySlot newSlot) => Slot = newSlot;
+        public void SetSlot(IInventorySlot newSlot)
+        {
+            Slot = newSlot;
+            SetBuyable();
+        }
+
+        public void SetBuyable() 
+        {
+            if (_slotPurchaseData != null)
+                Slot.SetPurchaseData(_slotPurchaseData);
+        }
 
         public override void OnDrop(PointerEventData eventData)
         {
@@ -35,13 +46,15 @@ namespace InventoryTest.Logic.Abstract
         public void Refresh()
         {
             if (Slot != null)
+            {
                 _uIInventoryItem.Refresh(Slot);
 
-            _slotText.gameObject.SetActive(Slot.PurchaseInfo.NeedToBuy);
-            ChangeSpriteAlpha(1);
+                _slotText.gameObject.SetActive(Slot.NeedToBuy);
+                ChangeSpriteAlpha(1);
 
-            if (Slot.PurchaseInfo.NeedToBuy)
-                ChangeSpriteAlpha(0.5f);
+                if (Slot.NeedToBuy)
+                    ChangeSpriteAlpha(0.5f);
+            }
         }
 
         private void ChangeSpriteAlpha(float alphaValue)

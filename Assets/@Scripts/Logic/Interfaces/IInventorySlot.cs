@@ -2,19 +2,21 @@
 
 namespace InventoryTest.Logic.Abstract
 {
-    public interface IInventorySlot 
+    public interface IInventorySlot
     {
         int Amount { get; }
         int Capacity { get; }
- 
+
         bool IsFull { get; }
         bool IsEmpty { get; }
 
-        Type ItemType { get; }    
+        bool NeedToBuy { get; set; }
+        int Price { get; set; }
+        Type ItemType { get; }
         IInventoryItem Item { get; }
-        IBuyable PurchaseInfo { get; }
 
         void SetItem(IInventoryItem item);
+        void SetPurchaseData(IBuyable purchase);
         void Clear();
     }
 }

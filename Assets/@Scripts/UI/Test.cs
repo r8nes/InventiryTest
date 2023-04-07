@@ -6,15 +6,13 @@ namespace InventoryTest.Logic.Abstract
     public class Test
     {
         private InventoryItemInfo _bullet1;
-        private InventoryItemInfo _bullet2;
         private UIInventorySlot[] _uiSlots;
 
         public InventoryWithSlots Inventory { get; }
 
-        public Test(InventoryItemInfo info1, InventoryItemInfo info2, UIInventorySlot[] slots) 
+        public Test(InventoryItemInfo info1, UIInventorySlot[] slots) 
         {
             _bullet1 = info1;
-            _bullet2 = info2;
             _uiSlots = slots;
 
             Inventory = new InventoryWithSlots(30);
@@ -27,12 +25,11 @@ namespace InventoryTest.Logic.Abstract
             var availableSlots = new List<IInventorySlot>(allSlots);
             var filledSlots = 5;
 
+            SetupUI(Inventory);
+
             for (int i = 0; i < filledSlots; i++)
             {
                 var filledSlot = AddRandomBullet1(availableSlots);
-                availableSlots.Remove(filledSlot);
-
-                filledSlot = AddRandomBullet2(availableSlots);
                 availableSlots.Remove(filledSlot);
             }
 
@@ -54,7 +51,6 @@ namespace InventoryTest.Logic.Abstract
             }
         }
 
-        // TODO: Refactoring type!!!
         #region Refactoring
 
         private IInventorySlot AddRandomBullet1(List<IInventorySlot> slots)
@@ -63,18 +59,6 @@ namespace InventoryTest.Logic.Abstract
             var randSlot = slots[randSlotIndex];
             var randCount = Random.Range(1, 4);
             var bullet1 = new BulletX(_bullet1);
-
-            bullet1.State.Amount = randCount;
-            Inventory.TryToAddToSlot(this, randSlot, bullet1);
-
-            return randSlot;
-        }
-        private IInventorySlot AddRandomBullet2(List<IInventorySlot> slots)
-        {
-            var randSlotIndex = Random.Range(0, slots.Count);
-            var randSlot = slots[randSlotIndex];
-            var randCount = Random.Range(1, 4);
-            var bullet1 = new BulletY(_bullet2);
 
             bullet1.State.Amount = randCount;
             Inventory.TryToAddToSlot(this, randSlot, bullet1);
