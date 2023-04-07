@@ -8,8 +8,8 @@ namespace InventoryTest.Logic.Abstract
         string Title { get; }
         string Description { get; }
         int MaxItemInSlot { get; }
+        float Weight { get; }
         Sprite SpriteIcon { get; }
 
-        // TODO: Add Weight later
     }
 }

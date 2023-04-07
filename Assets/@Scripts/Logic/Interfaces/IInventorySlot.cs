@@ -6,11 +6,13 @@ namespace InventoryTest.Logic.Abstract
     {
         int Amount { get; }
         int Capacity { get; }
+ 
         bool IsFull { get; }
         bool IsEmpty { get; }
 
         Type ItemType { get; }    
         IInventoryItem Item { get; }
+        IBuyable PurchaseInfo { get; }
 
         void SetItem(IInventoryItem item);
         void Clear();

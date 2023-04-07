@@ -9,7 +9,9 @@ namespace InventoryTest.Logic.Abstract
         public bool IsFull => !IsEmpty && Amount == Capacity;
         public bool IsEmpty => Item == null;
         public Type ItemType => Item.Type;
-        public IInventoryItem Item { get; private set; } 
+        public bool NeedToBuy { get; set;}
+        public IInventoryItem Item { get; private set; }
+        public IBuyable PurchaseInfo { get; private set; }
 
         public void SetItem(IInventoryItem item) 
         {

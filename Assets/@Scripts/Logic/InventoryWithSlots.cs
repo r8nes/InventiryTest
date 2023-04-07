@@ -30,7 +30,7 @@ namespace InventoryTest.Logic.Abstract
         {
             if (from.IsEmpty) return;
             
-            if (to.IsFull) return;
+            if (to.IsFull || to.PurchaseInfo.NeedToBuy) return;
 
             if (!to.IsEmpty && from.ItemType != to.ItemType) return;
 
@@ -146,6 +146,20 @@ namespace InventoryTest.Logic.Abstract
         }
 
         #region Getters
+
+        // TODO: Check later
+        public float GetAllWeight() 
+        {
+            float amount = 0;
+
+            List<IInventorySlot> allItemSlots = _slots.
+                FindAll(slot => !slot.IsEmpty);
+
+            foreach (IInventorySlot itemSlot in allItemSlots)
+                amount += (itemSlot.Item.Info.Weight * itemSlot.Amount);
+
+            return amount;
+        }
 
         public int GetItemAmount(Type itemType)
         {
