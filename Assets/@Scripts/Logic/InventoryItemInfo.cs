@@ -14,11 +14,23 @@ namespace InventoryTest.Logic.Abstract
 
         [SerializeField] private Sprite _spriteIcon;
 
-        public string Id => _id;
+        public string Id => _id; 
         public string Title => _title;
         public string Description => _descirption;
         public int MaxItemInSlot => _maxItemInShot;
         public float Weight => _weight;
         public Sprite SpriteIcon => _spriteIcon;
+    }
+
+    [CreateAssetMenu(fileName = "AmmoItemInfo", menuName = "SO/AmmoInfo")]
+    public class AmmoInfo : InventoryItemInfo 
+    {
+        [SerializeField] private int _damage;
+    }
+
+    [CreateAssetMenu(fileName = "EquipmentItemInfo", menuName = "SO/EquipmentInfo")]
+    public class EquimpentInfo : InventoryItemInfo
+    {
+        [SerializeField] private int _shield;
     }
 }

@@ -58,7 +58,7 @@ namespace InventoryTest.Logic.Abstract
             var randSlotIndex = Random.Range(0, slots.Count);
             var randSlot = slots[randSlotIndex];
             var randCount = Random.Range(1, 4);
-            var bullet1 = new BulletX(_bullet1);
+            var bullet1 = new RiffleAmmo(_bullet1);
 
             bullet1.State.Amount = randCount;
             Inventory.TryToAddToSlot(this, randSlot, bullet1);
