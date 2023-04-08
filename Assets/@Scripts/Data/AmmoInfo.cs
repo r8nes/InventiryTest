@@ -6,5 +6,7 @@ namespace InventoryTest.Logic.Abstract
     public class AmmoInfo : InventoryItemInfo
     {
         [SerializeField] private int _damageValue;
+
+        public int DamageValue => _damageValue;
     }
 }

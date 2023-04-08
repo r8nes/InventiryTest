@@ -5,15 +5,25 @@ namespace InventoryTest.Service
 {
     public class ItemFacade : IFacade
     {
-        
-        public List<Ammo> GetAmmoDatas()
+        private ItemContainer _itemContainer;
+
+        public ItemFacade(ItemContainer itemContainer)
         {
-            throw new global::System.NotImplementedException();
+            _itemContainer = itemContainer;
+            _itemContainer.AddItemsVariaty();
         }
 
-        public List<Ammo> GetEquipmentDatas()
+        public void Init() 
         {
-            throw new global::System.NotImplementedException();
+            _itemContainer.AddAmmoVariaty(new GunAmmo);
+        }
+
+        public void GetAmmoDatas()
+        {
+        }
+
+        public void GetEquipmentDatas()
+        {
         }
     }
 }
