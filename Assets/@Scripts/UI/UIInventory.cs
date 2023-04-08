@@ -1,24 +1,32 @@
 ﻿using InventoryTest.Logic.Abstract;
+using InventoryTest.Service;
 using UnityEngine;
 
 public class UIInventory : MonoBehaviour 
 {
-    private AmmoInfo _ammo;
-    private EquimpentInfo _equimpent;
+    // TODO Вынести данные из вьюхи
+    private IFacade _facade;
 
-    public EquimpentInfo Equimpent { get => _equimpent; set => _equimpent = value; }
-    public AmmoInfo Ammo { get => _ammo; set => _ammo = value; }
-
+    private AmmoConfig _ammoConfig;
+    private EquimpentConfig _equimpentConfig;
+  
     public InventoryWithSlots Inventory => test.Inventory;
 
     private Test test;
 
-    private void Awake()
+    public void Construct(AmmoConfig ammoConfig, EquimpentConfig equimpentConfig, IFacade facade) 
+    {
+        _ammoConfig = ammoConfig;
+        _equimpentConfig = equimpentConfig;
+        _facade = facade;
+    }
+
+    public void Awake()
     {
         UIInventorySlot[] uiSlots = GetComponentsInChildren<UIInventorySlot>();
 
-        test = new Test(_ammo, uiSlots);
-        test.FillSlots();
+        test = new Test(_ammoConfig, _equimpentConfig, uiSlots, _facade);
+        test.UpdateInventory();
     }
 
     public void AddRandomBullets() 

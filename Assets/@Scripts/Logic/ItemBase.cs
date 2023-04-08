@@ -26,24 +26,5 @@ namespace InventoryTest.Logic.Abstract
             return cloneItem;
         }
     }
-
-    public class RiffleAmmo : ItemBase, IAmmo
-    {
-        public int Power { get ; set; }
-
-        public override void Construct(IInventoryItemInfo info)
-        {
-            base.Construct(info);
-        }
-
-        public void Action() => Debug.Log("Пиу");
-    }
-
-    public class GunAmmo : ItemBase, IAmmo
-    {
-        public int Power { get ; set ; }
-
-        public void Action() => Debug.Log("Бдыщь");
-    }
 }
 

@@ -3,11 +3,11 @@ using InventoryTest.State;
 
 namespace InventoryTest.System
 {
-    public class Game
+    public class Starter
     {
         public GameStateMachine StateMachine;
 
-        public Game()
+        public Starter()
         {
             StateMachine = new GameStateMachine(AllServices.Container);
         }

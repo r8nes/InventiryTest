@@ -4,14 +4,4 @@ namespace InventoryTest.State
     {
         void Enter();
     }
-
-    public interface IExitableState
-    {
-        void Exit();
-    }
-
-    public interface IPayLoadState<TPayLoad> : IExitableState
-    {
-        void Enter(TPayLoad payLoad);
-    }
 }

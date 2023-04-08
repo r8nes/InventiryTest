@@ -1,13 +1,11 @@
 using InventoryTest.Assets;
 using InventoryTest.Factory;
 using InventoryTest.Service;
-using InventoryTest.System;
 
 namespace InventoryTest.State
 {
     public class BootstrapState : IState
     {
-
         private readonly AllServices _services;
         private readonly GameStateMachine _stateMachine;
 
@@ -31,14 +29,12 @@ namespace InventoryTest.State
             RegisterAssetProvider();
             RegisterStaticData();
             RegisterGameFactory();
+            RegisterFacadeService();
         }
 
         #region Register
 
-        private void RegisterStateMachine() 
-        {
-            _services.RegisterSingle<IGameStateMachine>(_stateMachine);
-        }
+        private void RegisterStateMachine() => _services.RegisterSingle<IGameStateMachine>(_stateMachine);
 
         private void RegisterAssetProvider()
         {
@@ -53,13 +49,17 @@ namespace InventoryTest.State
             _services.RegisterSingle(staticData);
         }
 
-
         private void RegisterGameFactory()
         {
             _services.RegisterSingle<IGameFactory>(
                             new GameFactory(
-                            _services.Single<IAssetsProvider>(),
-                            _services.Single<IStaticDataService>()));
+                            _services.Single<IAssetsProvider>()));
+        }
+
+        private void RegisterFacadeService() 
+        {
+            IFacade facade = new ItemFacade();
+            _services.RegisterSingle(facade);
         }
 
         #endregion

@@ -5,7 +5,7 @@ namespace InventoryTest.Service
 {
     public interface IFacade : IService
     {
-        void GetAmmoDatas();
-        void GetEquipmentDatas();
+        public IAmmo GetAmmoData();
+        public IEquipment GetEquipmentData();
     }
 }

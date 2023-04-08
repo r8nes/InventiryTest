@@ -1,38 +1,35 @@
 ﻿using System.Collections.Generic;
+using InventoryTest.Service;
 using UnityEngine;
 
 namespace InventoryTest.Logic.Abstract
 {
     public class Test
     {
-        private InventoryItemInfo _bullet1;
+        // TODO вынести в SO
+        private const int SLOT_CAPACITY = 30;
+
+        private IFacade _facade;
+        private AmmoConfig _ammoConfig;
+        private EquimpentConfig _equipmentConfig;
+
         private UIInventorySlot[] _uiSlots;
 
         public InventoryWithSlots Inventory { get; }
 
-        public Test(InventoryItemInfo info1, UIInventorySlot[] slots) 
+        public Test(AmmoConfig ammoConfig, EquimpentConfig equipmentConfig, UIInventorySlot[] slots, IFacade facade) 
         {
-            _bullet1 = info1;
+            _ammoConfig = ammoConfig;
+            _equipmentConfig = equipmentConfig;
             _uiSlots = slots;
+            _facade = facade;
 
-            Inventory = new InventoryWithSlots(30);
+            Inventory = new InventoryWithSlots(SLOT_CAPACITY);
             Inventory.OnInventoryStateChangedEvent += OnInventoryStateChanged;
         }
 
-        public void FillSlots() 
+        public void UpdateInventory() 
         {
-            var allSlots = Inventory.GetAllSlots();
-            var availableSlots = new List<IInventorySlot>(allSlots);
-            var filledSlots = 5;
-
-            SetupUI(Inventory);
-
-            for (int i = 0; i < filledSlots; i++)
-            {
-                var filledSlot = AddRandomBullet1(availableSlots);
-                availableSlots.Remove(filledSlot);
-            }
-
             SetupUI(Inventory);
         }
 
@@ -53,18 +50,18 @@ namespace InventoryTest.Logic.Abstract
 
         #region Refactoring
 
-        private IInventorySlot AddRandomBullet1(List<IInventorySlot> slots)
-        {
-            var randSlotIndex = Random.Range(0, slots.Count);
-            var randSlot = slots[randSlotIndex];
-            var randCount = Random.Range(1, 4);
-            var bullet1 = new RiffleAmmo(_bullet1);
+        //private IInventorySlot AddRandomBullet1(List<IInventorySlot> slots)
+        //{
+        //    var randSlotIndex = Random.Range(0, slots.Count);
+        //    var randSlot = slots[randSlotIndex];
+        //    var randCount = Random.Range(1, 4);
+        //    var bullet1 = new RiffleAmmo(_bullet1);
 
-            bullet1.State.Amount = randCount;
-            Inventory.TryToAddToSlot(this, randSlot, bullet1);
+        //    bullet1.State.Amount = randCount;
+        //    Inventory.TryToAddToSlot(this, randSlot, bullet1);
 
-            return randSlot;
-        }
+        //    return randSlot;
+        //}
 
         #endregion
 

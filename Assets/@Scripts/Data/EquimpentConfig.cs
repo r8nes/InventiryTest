@@ -3,7 +3,7 @@
 namespace InventoryTest.Logic.Abstract
 {
     [CreateAssetMenu(fileName = "EquipmentItemInfo", menuName = "SO/EquipmentInfo")]
-    public class EquimpentInfo : InventoryItemInfo
+    public class EquimpentConfig : InventoryItemInfo
     {
         [SerializeField] private int _equipmentValue;
     }

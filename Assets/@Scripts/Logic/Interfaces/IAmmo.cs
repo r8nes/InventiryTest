@@ -2,9 +2,8 @@
 {
     public interface IAmmo
     {
-        int Power { get; set; }
+        int Power { get; }
 
         void Action();
     }
 }
-

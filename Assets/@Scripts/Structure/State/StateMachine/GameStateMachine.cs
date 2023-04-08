@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using InventoryTest.Factory;
 using InventoryTest.Service;
-using InventoryTest.System;
 
 namespace InventoryTest.State
 {
@@ -23,7 +22,8 @@ namespace InventoryTest.State
                 [typeof(LoadLevelState)] = new LoadLevelState(
                 this,
                 services.Single<IGameFactory>(),
-                services.Single<IStaticDataService>()),
+                services.Single<IStaticDataService>(),
+                services.Single<IFacade>()),
 
                 [typeof(GameLoopState)] = new GameLoopState(this)
             };

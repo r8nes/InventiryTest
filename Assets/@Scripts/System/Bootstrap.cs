@@ -5,12 +5,11 @@ namespace InventoryTest.System
 {
     public class Bootstrap : MonoBehaviour
     {
-        
-        private Game _game;
+        private Starter _game;
 
         private void Awake()
         {
-            _game = new Game();
+            _game = new Starter();
             _game.StateMachine.Enter<BootstrapState>();
 
             DontDestroyOnLoad(this);
