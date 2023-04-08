@@ -1,6 +1,6 @@
 ﻿namespace InventoryTest.Logic.Abstract
 {
-    public interface IBuyable
+    public interface IPurchasable
     {
         int Price { get; set; }
         bool NeedToBuy { get; set; }

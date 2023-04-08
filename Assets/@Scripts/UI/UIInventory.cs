@@ -3,19 +3,21 @@ using UnityEngine;
 
 public class UIInventory : MonoBehaviour 
 {
-    [SerializeField] private InventoryItemInfo _item;
-    [SerializeField] private AmmoInfo _ammo;
-    [SerializeField] private EquimpentInfo _equimpent;
+    private AmmoInfo _ammo;
+    private EquimpentInfo _equimpent;
+
+    public EquimpentInfo Equimpent { get => _equimpent; set => _equimpent = value; }
+    public AmmoInfo Ammo { get => _ammo; set => _ammo = value; }
 
     public InventoryWithSlots Inventory => test.Inventory;
-    
+
     private Test test;
 
     private void Awake()
     {
         UIInventorySlot[] uiSlots = GetComponentsInChildren<UIInventorySlot>();
 
-        test = new Test(_item, uiSlots);
+        test = new Test(_ammo, uiSlots);
         test.FillSlots();
     }
 

@@ -16,7 +16,7 @@ namespace InventoryTest.Logic.Abstract
         IInventoryItem Item { get; }
 
         void SetItem(IInventoryItem item);
-        void SetPurchaseData(IBuyable purchase);
+        void SetPurchaseData(IPurchasable purchase);
         void Clear();
     }
 }

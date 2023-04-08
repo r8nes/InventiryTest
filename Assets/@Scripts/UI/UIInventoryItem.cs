@@ -10,7 +10,7 @@ public class UIInventoryItem : UIItem
 
     public IInventoryItem Item { get; private set; }
 
-    public void Refresh(IInventorySlot slot) 
+    public void Refresh(IInventorySlot slot)
     {
         if (slot.IsEmpty)
         {
@@ -18,9 +18,7 @@ public class UIInventoryItem : UIItem
             return;
         }
 
-        Item = slot.Item;
-        _imageIcon.sprite = Item.Info.SpriteIcon;
-        _imageIcon.gameObject.SetActive(true);
+        SetItemData(slot);
 
         bool textAmountEnabled = slot.Amount > 1;
         _textAmount.gameObject.SetActive(textAmountEnabled);
@@ -29,6 +27,14 @@ public class UIInventoryItem : UIItem
         {
             _textAmount.text = $"x{slot.Amount}";
         }
+    }
+
+    private void SetItemData(IInventorySlot slot)
+    {
+        Item = slot.Item;
+
+        _imageIcon.sprite = Item.Info.SpriteIcon;
+        _imageIcon.gameObject.SetActive(true);
     }
 
     private void Cleanup() 

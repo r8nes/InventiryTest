@@ -4,7 +4,7 @@ namespace InventoryTest.Logic.Abstract
 {
     [CreateAssetMenu(fileName = "SlotPurchaseInfo", menuName = "SO/Slot Purchase Config")]
 
-    public class SlotPurchaseData : ScriptableObject, IBuyable
+    public class SlotPurchaseData : ScriptableObject, IPurchasable
     {
         [SerializeField] private int _price;
         [SerializeField] private bool _needToBuy;

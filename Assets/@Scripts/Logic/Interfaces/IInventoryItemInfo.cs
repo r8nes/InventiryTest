@@ -4,12 +4,13 @@ namespace InventoryTest.Logic.Abstract
 {
     public interface IInventoryItemInfo 
     {
-        string Id { get; }
+        int Id { get; }
         string Title { get; }
         string Description { get; }
         int MaxItemInSlot { get; }
         float Weight { get; }
-        Sprite SpriteIcon { get; }
 
+        Sprite SpriteIcon { get; }
+        ItemType ItemTypeID { get; }
     }
 }

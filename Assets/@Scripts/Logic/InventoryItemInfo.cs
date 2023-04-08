@@ -5,32 +5,22 @@ namespace InventoryTest.Logic.Abstract
     [CreateAssetMenu(fileName = "InventoryItemInfo", menuName = "SO/ItemInfo")]
     public class InventoryItemInfo : ScriptableObject, IInventoryItemInfo
     {
-        [SerializeField] private string _id;
+        [SerializeField] private int _id;
         [SerializeField] private string _title;
         [SerializeField] private string _descirption;
 
-        [SerializeField] private int _maxItemInShot;
         [SerializeField] private float _weight;
+        [SerializeField] private int _maxItemInShot;
 
         [SerializeField] private Sprite _spriteIcon;
+        [SerializeField] private ItemType _itemTypeId;
 
-        public string Id => _id; 
+        public int Id => _id;
         public string Title => _title;
         public string Description => _descirption;
         public int MaxItemInSlot => _maxItemInShot;
         public float Weight => _weight;
         public Sprite SpriteIcon => _spriteIcon;
-    }
-
-    [CreateAssetMenu(fileName = "AmmoItemInfo", menuName = "SO/AmmoInfo")]
-    public class AmmoInfo : InventoryItemInfo 
-    {
-        [SerializeField] private int _damage;
-    }
-
-    [CreateAssetMenu(fileName = "EquipmentItemInfo", menuName = "SO/EquipmentInfo")]
-    public class EquimpentInfo : InventoryItemInfo
-    {
-        [SerializeField] private int _shield;
+        public ItemType ItemTypeID => _itemTypeId;
     }
 }

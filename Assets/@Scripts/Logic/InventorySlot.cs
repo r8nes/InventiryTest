@@ -2,7 +2,7 @@ using System;
 
 namespace InventoryTest.Logic.Abstract
 {
-    public class InventorySlot : IInventorySlot, IBuyable
+    public class InventorySlot : IInventorySlot, IPurchasable
     {
         public int Amount => IsEmpty ? 0 : Item.State.Amount;
         public int Capacity { get; private set; }
@@ -21,7 +21,7 @@ namespace InventoryTest.Logic.Abstract
             Capacity = item.Info.MaxItemInSlot;
         }
 
-        public void SetPurchaseData(IBuyable purchase) 
+        public void SetPurchaseData(IPurchasable purchase) 
         {
             NeedToBuy = purchase.NeedToBuy;
             Price = purchase.Price;
