@@ -10,30 +10,29 @@ namespace InventoryTest.Logic.Abstract
         private const int SLOT_CAPACITY = 30;
 
         private IFacade _facade;
-        private AmmoConfig _ammoConfig;
-        private EquimpentConfig _equipmentConfig;
+        private IStaticDataService _staticData;
 
         private UIInventorySlot[] _uiSlots;
 
+        private List<IInventoryItem> Ammos = new List<IInventoryItem>(5);
+
         public InventoryWithSlots Inventory { get; }
 
-        public Test(AmmoConfig ammoConfig, EquimpentConfig equipmentConfig, UIInventorySlot[] slots, IFacade facade) 
+        public Test(UIInventorySlot[] slots, IFacade facade, IStaticDataService staticData)
         {
-            _ammoConfig = ammoConfig;
-            _equipmentConfig = equipmentConfig;
+            _staticData = staticData;
             _uiSlots = slots;
             _facade = facade;
 
+            _facade.Warm();
+
             Inventory = new InventoryWithSlots(SLOT_CAPACITY);
             Inventory.OnInventoryStateChangedEvent += OnInventoryStateChanged;
-        }
 
-        public void UpdateInventory() 
-        {
             SetupUI(Inventory);
         }
 
-        private void SetupUI(InventoryWithSlots inventory) 
+        private void SetupUI(InventoryWithSlots inventory)
         {
             var allSlots = inventory.GetAllSlots();
             var allSlotsCount = allSlots.Length;
@@ -48,24 +47,56 @@ namespace InventoryTest.Logic.Abstract
             }
         }
 
-        #region Refactoring
+        public void AddAmmoItem(int amount)
+        {
+            InitAmmoConfig(out AmmoConfig riffleData, out AmmoConfig gunData);
+            InitAmmo(out RiffleAmmo riffleAmmo, out GunAmmo gunAmmo);
 
-        //private IInventorySlot AddRandomBullet1(List<IInventorySlot> slots)
-        //{
-        //    var randSlotIndex = Random.Range(0, slots.Count);
-        //    var randSlot = slots[randSlotIndex];
-        //    var randCount = Random.Range(1, 4);
-        //    var bullet1 = new RiffleAmmo(_bullet1);
+            riffleAmmo.Construct(riffleData);
+            gunAmmo.Construct(gunData);
 
-        //    bullet1.State.Amount = randCount;
-        //    Inventory.TryToAddToSlot(this, randSlot, bullet1);
+            Ammos.Add(riffleAmmo);
+            Ammos.Add(gunAmmo);
 
-        //    return randSlot;
-        //}
+            IInventorySlot[] inventorySlots = Inventory.GetAllSlots();
+            List<IInventorySlot> availableSlots = new List<IInventorySlot>(inventorySlots);
 
-        #endregion
+            for (int i = 0; i < Ammos.Count; i++)
+            {
+                var filledSlot = AddItem(availableSlots, Ammos[i], amount);
+                availableSlots.Remove(filledSlot);
+            }
+        }
 
-        private void OnInventoryStateChanged(object sender) 
+
+        private IInventorySlot AddItem(List<IInventorySlot> slots, IInventoryItem item, int amount)
+        {
+            for (int i = 0; i < slots.Count; i++)
+            {
+                if (Inventory.CheckSlot(slots[i]))
+                {
+                    item.State.Amount = amount;
+                    Inventory.TryToAddToSlot(this, slots[i], item);
+                    return slots[i];
+                }
+            }
+
+            return null;
+        }
+
+        private void InitAmmo(out RiffleAmmo riffleAmmo, out GunAmmo gunAmmo)
+        {
+            riffleAmmo = _facade.GetAmmo<RiffleAmmo>();
+            gunAmmo = _facade.GetAmmo<GunAmmo>();
+        }
+
+        private void InitAmmoConfig(out AmmoConfig riffleData, out AmmoConfig gunData)
+        {
+            riffleData = (AmmoConfig)_staticData.GetInventory(ItemType.RIFLE_AMMO);
+            gunData = (AmmoConfig)_staticData.GetInventory(ItemType.GUN_AMMO);
+        }
+
+        private void OnInventoryStateChanged(object sender)
         {
             foreach (var slot in _uiSlots)
             {

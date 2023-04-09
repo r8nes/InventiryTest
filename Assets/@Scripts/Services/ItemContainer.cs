@@ -1,21 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using InventoryTest.Logic.Abstract;
 
 namespace InventoryTest.Service
 {
-    public class ItemContainer
+    public class ItemContainer : IFacade
     {
-        private List<ItemBase> _items = new List<ItemBase>(30);
+        private Dictionary<Type, IAmmo> _ammoObjects = new Dictionary<Type, IAmmo>();
 
-        public void AddItemsVariaty(ItemBase derivedClass) => _items.Add(derivedClass);
-        public void AddItemsVariaty(List<ItemBase> derivedClass)
+        public void Warm() 
         {
-            for (int i = 0; i < derivedClass.Count; i++)
-                _items.Add(derivedClass[i]);
+           AddAmmo(new RiffleAmmo());
+           AddAmmo(new GunAmmo());
         }
 
-        public T GetAmmoVariaty<T>() where T : class, IAmmo => _items.OfType<T>().FirstOrDefault();
-        public T GetEqipmentVariaty<T>() where T : class, IEquipment => _items.OfType<T>().FirstOrDefault();
+        public void AddAmmo<T>(T ammo) where T : IAmmo
+        {
+            var type = typeof(T);
+            if (!_ammoObjects.ContainsKey(type))
+            {
+                _ammoObjects.Add(type, ammo);
+            }
+        }
+
+        public T GetAmmo<T>() where T : IAmmo
+        {
+            var type = typeof(T);
+            if (_ammoObjects.ContainsKey(type))
+            {
+                return (T)_ammoObjects[type];
+            }
+            else
+            {
+                return default(T);
+            }
+        }
     }
 }

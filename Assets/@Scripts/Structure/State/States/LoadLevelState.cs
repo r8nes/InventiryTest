@@ -1,4 +1,5 @@
-﻿using InventoryTest.Factory;
+﻿using System.Collections.Generic;
+using InventoryTest.Factory;
 using InventoryTest.Logic;
 using InventoryTest.Logic.Abstract;
 using InventoryTest.Service;
@@ -34,18 +35,16 @@ namespace InventoryTest.State
 
         private void OnLoaded()
         {
-           GameObject hud = InitHud();
+            GameObject hud = InitHud();
 
             UIInventory inventory = hud.GetComponent<UIInventory>();
-            
-            AmmoConfig ammoConfig = (AmmoConfig)_staticData.GetInventory(ItemType.AMMO);
-            EquimpentConfig equimpentConfig = (EquimpentConfig)_staticData.GetInventory(ItemType.EQUIPMENT);
 
-            inventory.Construct(ammoConfig, equimpentConfig, _facade);
+            inventory.Construct(_staticData, _facade);
+            inventory.Init();
 
             _gameStateMachine.Enter<GameLoopState>();
-        }
 
+        }
 
         #region Initials
 

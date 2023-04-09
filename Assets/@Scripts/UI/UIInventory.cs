@@ -6,27 +6,31 @@ public class UIInventory : MonoBehaviour
 {
     // TODO Вынести данные из вьюхи
     private IFacade _facade;
-
-    private AmmoConfig _ammoConfig;
-    private EquimpentConfig _equimpentConfig;
+    private IStaticDataService _staticData;
   
     public InventoryWithSlots Inventory => test.Inventory;
 
     private Test test;
 
-    public void Construct(AmmoConfig ammoConfig, EquimpentConfig equimpentConfig, IFacade facade) 
+    private void Update()
     {
-        _ammoConfig = ammoConfig;
-        _equimpentConfig = equimpentConfig;
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            test.AddAmmoItem(3);
+        }
+    }
+
+    public void Construct(IStaticDataService staticData, IFacade facade) 
+    {
+        _staticData = staticData;
         _facade = facade;
     }
 
-    public void Awake()
+    public void Init()
     {
         UIInventorySlot[] uiSlots = GetComponentsInChildren<UIInventorySlot>();
+        test = new Test(uiSlots, _facade, _staticData);
 
-        test = new Test(_ammoConfig, _equimpentConfig, uiSlots, _facade);
-        test.UpdateInventory();
     }
 
     public void AddRandomBullets() 

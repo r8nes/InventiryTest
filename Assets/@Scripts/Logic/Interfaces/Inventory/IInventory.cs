@@ -13,8 +13,9 @@ namespace InventoryTest.Logic.Abstract
         IInventoryItem[] GetAllItems(Type itemType);
         IInventoryItem[] GetEquippedItems();
 
+        bool CheckSlot(IInventorySlot slot);
+        bool HasItem(Type type, out IInventoryItem item);
         void Remove(object sender, Type itemType, int amount = 1);
         bool TryToAddToSlot(object sender, IInventorySlot slot, IInventoryItem item);
-        bool HasItem(Type type, out IInventoryItem item);
     }
 }

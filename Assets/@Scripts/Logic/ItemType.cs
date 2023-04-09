@@ -2,8 +2,8 @@
 {
     public enum ItemType 
     {
-        AMMO = 0,
-        EQUIPMENT = 1, 
-        OTHER = 10
+        RIFLE_AMMO = 0,
+        GUN_AMMO = 1, 
+        HELM_EQUIPMENT = 2
     }
 }

@@ -26,10 +26,10 @@ namespace InventoryTest.Logic.Abstract
                 _slots.Add(new InventorySlot());
         }
 
-        public void TransferItemsToSlot(object sender, IInventorySlot from, IInventorySlot to) 
+        public void TransferItemsToSlot(object sender, IInventorySlot from, IInventorySlot to)
         {
             if (from.IsEmpty) return;
-            
+
             if (to.IsFull || to.NeedToBuy) return;
 
             if (!to.IsEmpty && from.ItemType != to.ItemType) return;
@@ -73,38 +73,46 @@ namespace InventoryTest.Logic.Abstract
             return false;
         }
 
+        public bool CheckSlot(IInventorySlot slot)
+        {
+            if (slot.NeedToBuy || slot.IsFull) return false;
+
+            return true;
+        }
+
         public bool TryToAddToSlot(object sender, IInventorySlot slot, IInventoryItem item)
         {
-            if (slot.NeedToBuy)
-                return false;
-            
-            bool isFits = slot.Amount + item.State.Amount <= item.Info.MaxItemInSlot;
-            int amountToAdd = isFits
-                ? item.State.Amount
-                : item.Info.MaxItemInSlot - slot.Amount;
-            int amountLeft = item.State.Amount - amountToAdd;
-            
-            IInventoryItem clonedItem = item.Clone();
-            clonedItem.State.Amount = amountToAdd;
+            if (CheckSlot(slot))
+            {
 
-            if (slot.IsEmpty)
-                slot.SetItem(clonedItem);
-            else
-                slot.Item.State.Amount += amountToAdd;
+                bool isFits = slot.Amount + item.State.Amount <= item.Info.MaxItemInSlot;
+                int amountToAdd = isFits
+                    ? item.State.Amount
+                    : item.Info.MaxItemInSlot - slot.Amount;
+                int amountLeft = item.State.Amount - amountToAdd;
 
-            OnInventoryAddedEvent?.Invoke(sender, item, amountToAdd);
-            OnInventoryStateChangedEvent?.Invoke(sender);
+                IInventoryItem clonedItem = item.Clone();
+                clonedItem.State.Amount = amountToAdd;
 
-            if (amountLeft <= 0) return true;
+                if (slot.IsEmpty)
+                    slot.SetItem(clonedItem);
+                else
+                    slot.Item.State.Amount += amountToAdd;
 
-            item.State.Amount = amountLeft;
+                OnInventoryAddedEvent?.Invoke(sender, item, amountToAdd);
+                OnInventoryStateChangedEvent?.Invoke(sender);
 
+                if (amountLeft <= 0) return true;
+
+                item.State.Amount = amountLeft;
+
+            }
             return TryToAdd(sender, item);
         }
 
         public void Remove(object sender, Type item, int amount = 1)
         {
-            IInventorySlot[] slotsWithItem =  GetAllSlots(item);
+            IInventorySlot[] slotsWithItem = GetAllSlots(item);
 
             if (slotsWithItem.Length == 0) return;
 
@@ -114,10 +122,10 @@ namespace InventoryTest.Logic.Abstract
             for (int i = count - 1; i >= 0; i--)
             {
                 IInventorySlot slot = slotsWithItem[i];
-                if (slot.Amount >= amountToRemove) 
+                if (slot.Amount >= amountToRemove)
                 {
                     slot.Item.State.Amount -= amountToRemove;
-                    
+
                     if (slot.Amount <= 0)
                         slot.Clear();
 
@@ -129,7 +137,7 @@ namespace InventoryTest.Logic.Abstract
 
                 var amountToRemoved = slot.Amount;
                 amountToRemove -= slot.Amount;
-         
+
                 slot.Clear();
 
                 OnInventoryRemovedEvent?.Invoke(sender, item, amountToRemoved);
@@ -145,7 +153,7 @@ namespace InventoryTest.Logic.Abstract
 
         #region Getters
 
-        public float GetAllWeight() 
+        public float GetAllWeight()
         {
             float amount = 0;
 

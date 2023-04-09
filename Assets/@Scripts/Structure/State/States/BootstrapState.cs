@@ -58,7 +58,7 @@ namespace InventoryTest.State
 
         private void RegisterFacadeService() 
         {
-            IFacade facade = new ItemFacade();
+            IFacade facade = new ItemContainer();
             _services.RegisterSingle(facade);
         }
 

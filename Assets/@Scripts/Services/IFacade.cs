@@ -5,7 +5,7 @@ namespace InventoryTest.Service
 {
     public interface IFacade : IService
     {
-        public IAmmo GetAmmoData();
-        public IEquipment GetEquipmentData();
-    }
+        void Warm();
+        public T GetAmmo<T>() where T : IAmmo;
+    };
 }
