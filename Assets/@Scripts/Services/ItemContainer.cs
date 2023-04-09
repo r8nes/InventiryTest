@@ -8,10 +8,10 @@ namespace InventoryTest.Service
     {
         private Dictionary<Type, IAmmo> _ammoObjects = new Dictionary<Type, IAmmo>();
 
-        public void Warm() 
+        public void Warm()
         {
-           AddAmmo(new RiffleAmmo());
-           AddAmmo(new GunAmmo());
+            AddAmmo(new RiffleAmmo());
+            AddAmmo(new GunAmmo());
         }
 
         public void AddAmmo<T>(T ammo) where T : IAmmo
