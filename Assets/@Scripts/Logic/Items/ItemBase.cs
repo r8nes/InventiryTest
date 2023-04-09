@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace InventoryTest.Logic.Abstract
 {
@@ -10,13 +9,13 @@ namespace InventoryTest.Logic.Abstract
         
         public Type Type => GetType();
 
-        public  virtual void Construct(IInventoryItemInfo info) 
+        public virtual void Construct(IInventoryItemInfo info) 
         {
             Info = info;
             State = new InventoryItemState();
         }
 
-        public IInventoryItem Clone()
+        public virtual IInventoryItem Clone()
         {
             ItemBase cloneItem = new ItemBase();
             

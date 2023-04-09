@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UIInventory : MonoBehaviour 
 {
-    // TODO Вынести данные из вьюхи
     private IFacade _facade;
     private IStaticDataService _staticData;
   
@@ -16,7 +15,22 @@ public class UIInventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            test.AddAmmoItem(3);
+            test.AddItem(TypeFlag.AMMO,3);
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            test.AttackBullet();
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            test.AddItem(TypeFlag.EQUIPMENT, 1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            test.DeleteRandom();
         }
     }
 
@@ -30,11 +44,5 @@ public class UIInventory : MonoBehaviour
     {
         UIInventorySlot[] uiSlots = GetComponentsInChildren<UIInventorySlot>();
         test = new Test(uiSlots, _facade, _staticData);
-
-    }
-
-    public void AddRandomBullets() 
-    {
-         
     }
 }

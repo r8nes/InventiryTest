@@ -72,16 +72,8 @@ namespace InventoryTest.Logic.Abstract
             return false;
         }
 
-        public bool CheckSlot(IInventorySlot slot)
-        {
-            if (slot.NeedToBuy || slot.IsFull) return false;
-
-            return true;
-        }
-
         public bool TryToAddToSlot(object sender, IInventorySlot slot, IInventoryItem item)
         {
-
             bool isFits = slot.Amount + item.State.Amount <= item.Info.MaxItemInSlot;
             int amountToAdd = isFits
                 ? item.State.Amount
