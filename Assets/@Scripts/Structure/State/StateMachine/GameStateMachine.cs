@@ -19,6 +19,10 @@ namespace InventoryTest.State
                 this,
                 services),
 
+                [typeof(LoadProgressState)] = new LoadProgressState(
+                this,
+                services.Single<IStorageService>()),
+
                 [typeof(LoadLevelState)] = new LoadLevelState(
                 this,
                 services.Single<IGameFactory>(),

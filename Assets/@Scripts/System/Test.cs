@@ -65,7 +65,7 @@ namespace InventoryTest.Logic.Abstract
             }
         }
 
-        public void AttackBullet()
+        public void Shoot()
         {
             int rand = Random.Range(0, Ammos.Count);
             Inventory.Remove(this, Ammos[rand].Type);

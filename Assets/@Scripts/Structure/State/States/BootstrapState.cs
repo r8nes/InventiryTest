@@ -21,7 +21,7 @@ namespace InventoryTest.State
 
         public void Exit() { }
 
-        private void EnterLoadLevel() => _stateMachine.Enter<LoadLevelState>();
+        private void EnterLoadLevel() => _stateMachine.Enter<LoadProgressState>();
 
         private void GloabalRegisterService()
         {
@@ -30,6 +30,7 @@ namespace InventoryTest.State
             RegisterStaticData();
             RegisterGameFactory();
             RegisterFacadeService();
+            RegisterStorageService();
         }
 
         #region Register
@@ -60,6 +61,12 @@ namespace InventoryTest.State
         {
             IFacade facade = new ItemContainer();
             _services.RegisterSingle(facade);
+        }
+
+        private void RegisterStorageService()
+        {
+            IStorageService storage = new JsonFileStorageService();
+            _services.RegisterSingle(storage);
         }
 
         #endregion

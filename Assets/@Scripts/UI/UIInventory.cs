@@ -11,29 +11,6 @@ public class UIInventory : MonoBehaviour
 
     private Test test;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            test.AddItem(TypeFlag.AMMO,3);
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            test.AttackBullet();
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            test.AddItem(TypeFlag.EQUIPMENT, 1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            test.DeleteRandom();
-        }
-    }
-
     public void Construct(IStaticDataService staticData, IFacade facade) 
     {
         _staticData = staticData;
@@ -45,4 +22,9 @@ public class UIInventory : MonoBehaviour
         UIInventorySlot[] uiSlots = GetComponentsInChildren<UIInventorySlot>();
         test = new Test(uiSlots, _facade, _staticData);
     }
+
+    public void Shoot() => test.Shoot();
+    public void AddItem() => test.AddItem(TypeFlag.AMMO, 3);
+    public void AddEqipment() => test.AddItem(TypeFlag.EQUIPMENT, 1);
+    public void Remove() => test.DeleteRandom();
 }
