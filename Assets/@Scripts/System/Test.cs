@@ -75,8 +75,14 @@ namespace InventoryTest.Logic.Abstract
         {
             var slots = Inventory.GetAllItems();
             var randItemIndex = Random.Range(0, slots.Length);
-            var randItem = slots[randItemIndex];
 
+            if (slots.Length<= 0)
+            {
+                Debug.LogWarning($" The slots is {slots.Length}. Required items.");
+                return;
+            }
+
+            var randItem = slots[randItemIndex];
             Inventory.Remove(this, randItem.Type, randItem.State.Amount);
         }
 
